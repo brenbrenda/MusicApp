@@ -11,9 +11,22 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //MARK: -embedded navigationViewController
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = UINavigationController.init(rootViewController: ViewController())
+        window.makeKeyAndVisible()
+        self.window = window
+        
+        //MARK: -enabled background mode play musice & enabled silent mode can play music
+        AudioHelper.shared.authSessionAccess()
+        
+        //configure Remote Control for volume and music
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         return true
     }
 
