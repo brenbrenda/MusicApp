@@ -59,6 +59,9 @@ extension ViewController: PlayAudioButtonDelegate {
     func didUpdatePlayButton() {
         playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
     }
+    func finishPlaying() {
+        playNext()
+    }
     
     @objc func playPressByFloatView(sender: UIButton) {
         

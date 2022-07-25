@@ -9,6 +9,7 @@ import UIKit
 import MediaPlayer
 protocol PlayAudioButtonDelegate{
     func didUpdatePlayButton()
+    func finishPlaying()
 }
 
 class PlayAudioViewController: UIViewController {
@@ -99,9 +100,10 @@ class PlayAudioViewController: UIViewController {
                 self.slider.value = Float(audioPosition.current)/Float(audioPosition.durationTime)
                 if Float(audioPosition.current)/Float(audioPosition.durationTime) == 1 {
                     self.slider.maximumTrackTintColor = .gray
-                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+                    
+//                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
                     //TODO handling not playing status
-//                    self.delegate?.didUpdatePlayButton()
+                    self.delegate?.finishPlaying()
                     
                 } else {
                     self.slider.maximumTrackTintColor = .systemGray6//right side
@@ -110,7 +112,6 @@ class PlayAudioViewController: UIViewController {
                 let secondString = String(format: "%02d", Int(audioPosition.durationTime)%60)
                 let minuteString = String(format: "%02d", Int(audioPosition.durationTime)/60)
                 
-                //TODO: label update
                 self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
                 self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)
             }
