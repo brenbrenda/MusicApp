@@ -46,7 +46,11 @@ class ViewController: UIViewController {
         return image
     }()
     let currentPlayLabel = UILabel()
-    var playButton = UIButton().playButton()
+    var playButton: Box<UIButton> = Box(UIButton()) {
+        didSet {
+            playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        }
+    }
     let nextButton = UIButton().nextButton()
     var indexPath: IndexPath?
     
@@ -54,10 +58,10 @@ class ViewController: UIViewController {
     lazy var floatingPlayView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray3
-        let stackView = UIStackView(arrangedSubviews: [imageView, currentPlayLabel, playButton, nextButton])
+        let stackView = UIStackView(arrangedSubviews: [imageView, currentPlayLabel, playButton.value, nextButton])
         imageView.widthAnchor.constraint(equalToConstant: 55).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 55).isActive = true
-        playButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        playButton.value.widthAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         currentPlayLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 100 - 110 - 30).isActive = true
         stackView.floatViewStack_settingLayout(view: view)
@@ -116,8 +120,17 @@ class ViewController: UIViewController {
         let singleTouch = UITapGestureRecognizer(target: self, action: #selector(singleTap(recognizer:)))
         floatingPlayView.addGestureRecognizer(singleTouch)
         
-        playButton.addTarget(self, action: #selector(playPressByFloatView(sender:)), for: .touchUpInside)
+        playButton.value.addTarget(self, action: #selector(playPressByFloatView(sender:)), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(playNext), for: .touchUpInside)
+        /*AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
+         if let audioPosition = audioPosition {
+             
+             guard let self = self else { return }
+             
+             self.slider.value =*/
+        playButton.bind { button in
+            button.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        }
     }
     
     @objc private func dismissAction(){

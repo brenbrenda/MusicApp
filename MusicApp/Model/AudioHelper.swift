@@ -52,14 +52,18 @@ class AudioHelper: NSObject, ObservableObject {
             } else {
                 status = .unknown
             }
-            
+            //TODO:when player is playing other song does not chang the button status
             switch status {
             case .readyToPlay:
                 self.playMusic()
+                self.status = .playing
+                
             case .failed:
                 print("failed to play")
+                self.status = .cannotPlay
             case .unknown:
                 print("unknown error occurred")
+                self.status = .cannotPlay
             @unknown default:
                 print("err")
             }
@@ -97,6 +101,7 @@ class AudioHelper: NSObject, ObservableObject {
         DispatchQueue.main.async {
             self.audioPlayer.replaceCurrentItem(with: item)
             self.audioPlayer.addObserver(self, forKeyPath: #keyPath(AVPlayer.timeControlStatus), options: [.new], context: nil)
+            
             self.addTimeObserver()
             self.audioPlayer.allowsExternalPlayback = true
             self.audioPlayer.usesExternalPlaybackWhileExternalScreenIsActive = true
@@ -121,12 +126,16 @@ class AudioHelper: NSObject, ObservableObject {
     }
     
     func playMusic() {
+        audioPlayer.volume = 1
         audioPlayer.play()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlerAVSession(notification:)), name: AVAudioSession.interruptionNotification ,object: audioSession)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handlerAVSession(notification:)), name: AVAudioSession.silenceSecondaryAudioHintNotification, object: audioSession) //other music is playing
         
         NotificationCenter.default.addObserver(self, selector: #selector(play(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: self.audioPlayer.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(self.play(notification:)),
                                                name: .AVPlayerItemFailedToPlayToEndTime, object: self.audioPlayer.currentItem)
-        status = .playing
+//        status = .playing
     }
     
     func pauseMusic() {
@@ -136,7 +145,17 @@ class AudioHelper: NSObject, ObservableObject {
     
     
     func getPlayStatusImage() -> UIImage? {
-        return status == .playing ? UIImage.init(systemName: "pause.fill") : UIImage.init(systemName: "play.fill")
+        if status == .playing {
+            return UIImage.init(systemName: "pause.fill")
+        } else if status == .pause {
+            return UIImage.init(systemName: "play.fill")
+        } else if status == .cannotPlay {
+            return UIImage.init(systemName: "rays")
+        } else if status == .endPlaying {
+            return UIImage.init(systemName: "play.fill")
+        }
+        return nil
+//        return status == .playing ? UIImage.init(systemName: "pause.fill") : UIImage.init(systemName: "play.fill")
     }
     func authSessionAccess() {
         audioSession = AVAudioSession.sharedInstance()
@@ -212,11 +231,64 @@ extension AudioHelper {
             
             print("cannot play music \(error)")
         
-            
         default:
             break
         }
     }
+    
+    @objc func handlerAVSession(notification: Notification) {
+        
+        print("diuiwehihdihewi\(notification.name)")
+        switch notification.name {
+        case AVAudioSession.interruptionNotification:
+            //MARK: handler when music was interuptted accidently
+            print("ekk")
+            guard let info = notification.userInfo,
+                    let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+                        return
+                }
+                if type == .began {
+                    // Interruption began, take appropriate actions (save state, update user interface)
+                    print("!!!!please stop your music1")
+                    status = .pause
+                    
+                }
+                else if type == .ended {
+                    guard let optionsValue =
+                        info[AVAudioSessionInterruptionOptionKey] as? UInt else {
+                            return
+                    }
+                    let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                    if options.contains(.shouldResume) {
+                        // Interruption Ended - playback should resume
+                    }
+                }
+        case AVAudioSession.silenceSecondaryAudioHintNotification:
+            print("!!!!please stop your music22")
+            status = .pause
+            
+            guard let userInfo = notification.userInfo,
+                    let typeValue = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt,
+                  let type = AVAudioSession.SilenceSecondaryAudioHintType(rawValue: typeValue) else {
+                        return
+                }
+             
+                if type == .begin {
+                    // Other app audio started playing - mute secondary audio
+                    print(" Other app audio started playing - mute secondary audio")
+//                    status = .pause
+                } else {
+                    // Other app audio stopped playing - restart secondary audio
+                    print("restart")
+//                    status = .playing
+                }
+        default:
+            print("???")
+        }
+    }
+    
+    
 }
 
 

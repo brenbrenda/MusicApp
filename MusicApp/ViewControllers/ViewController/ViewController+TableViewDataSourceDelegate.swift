@@ -48,7 +48,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         AudioHelper.shared.status = .playing
         AudioHelper.shared.playMusic(with: previewUrl)
         AudioHelper.shared.setNowPlayingInfo(music: music)
-        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         imageView.loadPreviewUrl(imageUrl)
         floatingPlayView.alpha = 1
     }
@@ -57,7 +57,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController: PlayAudioButtonDelegate {
     
     func didUpdatePlayButton() {
-        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
     }
     func finishPlaying() {
         playNext()
@@ -67,7 +67,7 @@ extension ViewController: PlayAudioButtonDelegate {
         
         AudioHelper.shared.status = AudioHelper.shared.status == .playing ? .pause : .playing
         
-        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         
         let _ = AudioHelper.shared.status == .playing ? AudioHelper.shared.playMusic() : AudioHelper.shared.pauseMusic()
         
@@ -90,7 +90,7 @@ extension ViewController: PlayAudioButtonDelegate {
         AudioHelper.shared.status = .playing
         AudioHelper.shared.playMusic(with: previewUrl)
         AudioHelper.shared.setNowPlayingInfo(music: music)
-        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         imageView.loadPreviewUrl(imageUrl)
         floatingPlayView.alpha = 1
     }

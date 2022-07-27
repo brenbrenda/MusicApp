@@ -34,11 +34,7 @@ extension PlayAudioViewController {
         }
         center.changePlaybackPositionCommand.isEnabled = true
         center.changePlaybackPositionCommand.addTarget { event in
-            guard let positionEvent = event as? MPChangePlaybackPositionCommandEvent, let durationTime = AudioHelper.shared.audioPosition.value?.durationTime else { return .commandFailed }
-            
-//            let percent = Float64(Float(positionEvent.positionTime)/Float(durationTime))
-//
-//            let targetTime:CMTime = CMTimeMakeWithSeconds(percent, preferredTimescale: Int32(NSEC_PER_SEC))
+            guard let positionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             guard let totalTime = AudioHelper.shared.audioPlayer.currentItem?.asset.duration else { return .commandFailed }
             
             let targetTime = CMTimeMake(value: (totalTime.value * Int64(positionEvent.positionTime))/Int64(CMTimeGetSeconds(totalTime)), timescale: totalTime.timescale)
@@ -49,7 +45,6 @@ extension PlayAudioViewController {
             {
                 AudioHelper.shared.audioPlayer.play()
             }
-            
             
             return .success
         }

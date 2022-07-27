@@ -31,7 +31,11 @@ class PlayAudioViewController: UIViewController {
     let songLabel = UILabel().setSemiboldLabel(textColor: .black)
     
     var delegate: PlayAudioButtonDelegate?
-    let playButton = UIButton().playButton()
+    var playButton = UIButton().playButton() {
+        didSet {
+            playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        }
+    }
     
     let nextButton: UIButton = {
         let button = UIButton()
