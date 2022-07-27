@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import AsyncDisplayKit
 
-class ViewController: UIViewController {
+
+class ViewController: ASDKViewController<ASDisplayNode> {
     
     
     private var hasRes: Bool = false
@@ -67,6 +69,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpInitial()
+        setupIndex()
     }
     
     override func viewDidLayoutSubviews() {
@@ -120,14 +123,33 @@ class ViewController: UIViewController {
         nextButton.addTarget(self, action: #selector(playNext), for: .touchUpInside)
     }
     
+    private func setupIndex() {
+        guard let indexPath = self.indexPath, let resultCount = musicData?.resultCount else { return }
+        print("indexPath row \(indexPath.row)   result \(resultCount)")
+       
+        //addedIndexPath.row >= 0超過tableview的indexpath 就不在繼續disabled nextbutton
+        if resultCount == indexPath.row {
+            print("setting button next diabled")
+            nextButton.tintColor = .black
+            nextButton.isEnabled = false
+        } else if resultCount > indexPath.row {
+            nextButton.isEnabled = true
+            nextButton.tintColor = .blue
+        }
+    }
+    
     @objc private func dismissAction(){
         dismiss(animated: true)
     }
    
     @objc func singleTap(recognizer: UITapGestureRecognizer) {
-        
+        /*if resultCount == addedIndexPath.row {
+         print("setting button next diabled")
+         nextButton.tintColor = .black
+         nextButton.isEnabled = false
+     } else if resultCount > addedIndexPath.row {*/
         //TODO: replace with animation and not using present modal
-        if let indexPath = self.indexPath, let music = musicData?.results[indexPath.row] {
+        if let indexPath = self.indexPath, let resultCount = musicData?.resultCount, indexPath.row <= resultCount, let music = musicData?.results[indexPath.row] {
             
             let detailViewModel = DetailViewModel(music: music)
             let vc = PlayAudioViewController(detailViewModel: detailViewModel)

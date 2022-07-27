@@ -11,12 +11,35 @@ class Network {
     
     static let shared = Network()
     
+    
+    func fetchDatawithAsyn(term: String, entity: String?) async throws ->  MusicData {
+        let string = entity == nil ? "https://itunes.apple.com/search?term=\(term)" : "https://itunes.apple.com/search?term=\(term)&entity=\(entity!)"
+        //&entity=allArtist&attribute=allArtistTerm
+        guard let urlStr = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: urlStr) else {
+            throw FetchError.notValidUrl
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw FetchError.failedToRequest }
+        do {
+            let result = try  JSONDecoder().decode(MusicData.self, from: data)
+            if result.results.isEmpty {
+                throw FetchError.noData
+            } else {
+                return result
+            }
+        } catch {
+            throw FetchError.failledToDecode
+            
+        }
+    }
     func fetchData(term: String, entity: String?, completionHandler: @escaping (Result<MusicData, FetchError>) -> Void) {
         
         let string = entity == nil ? "https://itunes.apple.com/search?term=\(term)" : "https://itunes.apple.com/search?term=\(term)&entity=\(entity!)"
         //&entity=allArtist&attribute=allArtistTerm
         if let urlStr = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-           let url = URL(string: urlStr){
+           let url = URL(string: urlStr) {
             
             URLSession.shared.dataTask(with: url) { (data, response, error) in
                 
@@ -48,6 +71,8 @@ enum FetchError: Error {
     case parsingError
     case failledToDecode
     case noData
+    case failedToRequest
+    case notValidUrl
 }
 
 

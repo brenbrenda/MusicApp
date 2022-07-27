@@ -90,8 +90,6 @@ class PlayAudioViewController: UIViewController {
         setupView()
         //bind value of music progress
         
-        
-        
         AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
             if let audioPosition = audioPosition {
                 
@@ -109,8 +107,6 @@ class PlayAudioViewController: UIViewController {
                     self.slider.maximumTrackTintColor = .systemGray6//right side
                     self.slider.minimumTrackTintColor = .gray //left side
                 }
-                let secondString = String(format: "%02d", Int(audioPosition.durationTime)%60)
-                let minuteString = String(format: "%02d", Int(audioPosition.durationTime)/60)
                 
                 self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
                 self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)

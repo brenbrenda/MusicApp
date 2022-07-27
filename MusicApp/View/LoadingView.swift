@@ -75,6 +75,7 @@ public class LoadingView {
                 .filter({$0.isKeyWindow}).first
             
             if let loadingView = loadingView, let window = keyWindow {
+                
                 UIView.animate(withDuration: 0.4, animations: {
                     loadingView.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
                     loadingView.center = window.center

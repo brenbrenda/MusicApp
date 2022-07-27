@@ -16,6 +16,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! SongCell
+        
         if let music = musicData?.results[indexPath.row], let imageUrl = music.artworkUrl100, let price = music.trackPrice {
             cell.musicImage.loadPreviewUrl(imageUrl)
             cell.musicNameLabel.text = music.trackName
@@ -79,7 +80,7 @@ extension ViewController: PlayAudioButtonDelegate {
         let IndexPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
         self.indexPath = IndexPath
         
-        guard let addedIndexPath = self.indexPath, let music = musicData?.results[addedIndexPath.row] else { return }
+        guard let addedIndexPath = self.indexPath, let resultCount = musicData?.resultCount, addedIndexPath.row <= resultCount-1, let music = musicData?.results[addedIndexPath.row] else { return }
         currentPlayLabel.text = " " + (music.trackName ?? "")
         
         guard let previewUrl = music.previewUrl, let imageUrl = music.artworkUrl100 else {

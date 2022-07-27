@@ -150,8 +150,8 @@ class AudioHelper: NSObject, ObservableObject {
     func setNowPlayingInfo(music: Music) {
         
         var info = [String: Any]()
-        info[MPMediaItemPropertyTitle] = music.trackName//"YourMusicTitle"
-        info[MPMediaItemPropertyArtist] = music.artistName//"YourMusicArtist"
+        info[MPMediaItemPropertyTitle] = music.trackName
+        info[MPMediaItemPropertyArtist] = music.artistName
         info[MPMediaItemPropertyAlbumTitle] = music.collectionName
         info[MPMediaItemPropertyPlaybackDuration] = audioPlayer.currentItem?.asset.duration.seconds
         info[MPNowPlayingInfoPropertyPlaybackRate] = audioPlayer.rate
