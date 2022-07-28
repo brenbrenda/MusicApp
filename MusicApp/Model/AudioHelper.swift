@@ -14,7 +14,7 @@ import MediaPlayer//FOR MPREMOTECOMMANDCENTER
 class AudioHelper: NSObject, ObservableObject {
     
     
-    @Published var status: PlayMode = .pause
+    @Published var status: Box<PlayMode> = Box(.pause)
     //update playing track of slider and time
     var audioPosition: Box<AudioPosition?> = Box(nil)
     var audioPlayerObserver: Any?
@@ -56,14 +56,14 @@ class AudioHelper: NSObject, ObservableObject {
             switch status {
             case .readyToPlay:
                 self.playMusic()
-                self.status = .playing
+                self.status = Box(.playing)
                 
             case .failed:
                 print("failed to play")
-                self.status = .cannotPlay
+                self.status = Box(.cannotPlay)
             case .unknown:
                 print("unknown error occurred")
-                self.status = .cannotPlay
+                self.status = Box(.cannotPlay)
             @unknown default:
                 print("err")
             }
@@ -140,21 +140,29 @@ class AudioHelper: NSObject, ObservableObject {
     
     func pauseMusic() {
         audioPlayer.pause()
-        status = .pause
+        status = Box(.pause)
     }
     
     
     func getPlayStatusImage() -> UIImage? {
-        if status == .playing {
-            return UIImage.init(systemName: "pause.fill")
-        } else if status == .pause {
-            return UIImage.init(systemName: "play.fill")
-        } else if status == .cannotPlay {
-            return UIImage.init(systemName: "rays")
-        } else if status == .endPlaying {
-            return UIImage.init(systemName: "play.fill")
+        var image: UIImage?
+        status.bind { mode in
+            switch mode {
+            case .pause :
+                image = UIImage(systemName: "play.fill")
+            case .playing:
+                image = UIImage(systemName: "pause.fill")
+            case .cannotPlay:
+                image = UIImage.init(systemName: "rays")
+            case .endPlaying:
+                image = UIImage.init(systemName: "play.fill")
+                
+            }
+            print("image \(image)")
         }
-        return nil
+        
+        
+        return image
 //        return status == .playing ? UIImage.init(systemName: "pause.fill") : UIImage.init(systemName: "play.fill")
     }
     func authSessionAccess() {
@@ -251,7 +259,7 @@ extension AudioHelper {
                 if type == .began {
                     // Interruption began, take appropriate actions (save state, update user interface)
                     print("!!!!please stop your music1")
-                    status = .pause
+                    status.value = .pause
                     
                 }
                 else if type == .ended {
@@ -266,7 +274,7 @@ extension AudioHelper {
                 }
         case AVAudioSession.silenceSecondaryAudioHintNotification:
             print("!!!!please stop your music22")
-            status = .pause
+            status.value = .pause
             
             guard let userInfo = notification.userInfo,
                     let typeValue = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt,

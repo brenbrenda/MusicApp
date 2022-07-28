@@ -154,7 +154,7 @@ class ViewController: UIViewController {
     @objc func segmentValueChange(_ sender: UISegmentedControl) {
         
         print("Value segment trigger")
-        guard searchBar.text?.isEmpty == false,let text = searchBar.text else { return }
+        guard searchBar.text?.isEmpty == false, let text = searchBar.text else { return }
         searchHandler(term: text, entity: array[sender.selectedSegmentIndex])
     }
     

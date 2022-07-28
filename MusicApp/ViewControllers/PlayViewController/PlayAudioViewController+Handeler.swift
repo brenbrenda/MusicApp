@@ -8,6 +8,31 @@
 import MediaPlayer
 
 extension PlayAudioViewController {
+    
+    func bindProgress() {
+        //bind value of music progress
+        AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
+            if let audioPosition = audioPosition {
+                
+                guard let self = self else { return }
+                
+                self.slider.value = Float(audioPosition.current)/Float(audioPosition.durationTime)
+                if Float(audioPosition.current)/Float(audioPosition.durationTime) == 1 {
+                    self.slider.maximumTrackTintColor = .gray
+                    
+//                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+                    //TODO handling not playing status
+                    self.delegate?.finishPlaying()
+                    
+                } else {
+                    self.slider.maximumTrackTintColor = .systemGray6//right side
+                    self.slider.minimumTrackTintColor = .gray //left side
+                }
+                self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
+                self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)
+            }
+        }
+    }
     func setupView() {
         
         view.addSubview(albumLabel)
@@ -27,6 +52,12 @@ extension PlayAudioViewController {
         playButton.addTarget(self, action: #selector(toggletPlay), for: .touchUpInside)
     }
 
+    func getTimeTrack(time: Double) -> String {
+        
+        let secondString = String(format: "%02d", Int(time)%60)
+        let minuteString = String(format: "%02d", Int(time)/60)
+        return "\(minuteString):\(secondString)"
+    }
     
     @objc func nextTenSeconds() {
         

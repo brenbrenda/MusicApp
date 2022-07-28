@@ -92,44 +92,11 @@ class PlayAudioViewController: UIViewController {
         
         super.viewDidLoad()
         setupView()
-        //bind value of music progress
-        
-        
-        
-        AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
-            if let audioPosition = audioPosition {
-                
-                guard let self = self else { return }
-                
-                self.slider.value = Float(audioPosition.current)/Float(audioPosition.durationTime)
-                if Float(audioPosition.current)/Float(audioPosition.durationTime) == 1 {
-                    self.slider.maximumTrackTintColor = .gray
-                    
-//                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-                    //TODO handling not playing status
-                    self.delegate?.finishPlaying()
-                    
-                } else {
-                    self.slider.maximumTrackTintColor = .systemGray6//right side
-                    self.slider.minimumTrackTintColor = .gray //left side
-                }
-                let secondString = String(format: "%02d", Int(audioPosition.durationTime)%60)
-                let minuteString = String(format: "%02d", Int(audioPosition.durationTime)/60)
-                
-                self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
-                self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)
-            }
-        }
-        
+        bindProgress()
         setupRemoteCommand()
     }
     
-    private func getTimeTrack(time: Double) -> String {
-        
-        let secondString = String(format: "%02d", Int(time)%60)
-        let minuteString = String(format: "%02d", Int(time)/60)
-        return "\(minuteString):\(secondString)"
-    }
+    
     
     override func viewDidLayoutSubviews() {
         
@@ -147,11 +114,11 @@ class PlayAudioViewController: UIViewController {
     
     @objc func toggletPlay() {
         
-         AudioHelper.shared.status = AudioHelper.shared.status == .playing ? .pause : .playing
+        AudioHelper.shared.status.value = AudioHelper.shared.status.value == .playing ? .pause : .playing
          
          playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
          
-         let _ = AudioHelper.shared.status == .playing ? AudioHelper.shared.playMusic() : AudioHelper.shared.pauseMusic()
+        let _ = AudioHelper.shared.status.value == .playing ? AudioHelper.shared.playMusic() : AudioHelper.shared.pauseMusic()
         
         delegate?.didUpdatePlayButton()
     }

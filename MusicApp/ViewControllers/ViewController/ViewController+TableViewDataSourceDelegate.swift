@@ -7,13 +7,13 @@
 import UIKit
 
 //MARK: TableViewDataSource and Delegate
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+
+extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return musicData?.resultCount ?? 0
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! SongCell
         if let music = musicData?.results[indexPath.row], let imageUrl = music.artworkUrl100, let price = music.trackPrice {
@@ -25,6 +25,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         return cell
+    }
+    
+}
+extension ViewController: UITableViewDelegate {
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -45,7 +53,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         
-        AudioHelper.shared.status = .playing
+        AudioHelper.shared.status.value = .playing
         AudioHelper.shared.playMusic(with: previewUrl)
         AudioHelper.shared.setNowPlayingInfo(music: music)
         playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
@@ -65,11 +73,11 @@ extension ViewController: PlayAudioButtonDelegate {
     
     @objc func playPressByFloatView(sender: UIButton) {
         
-        AudioHelper.shared.status = AudioHelper.shared.status == .playing ? .pause : .playing
+        AudioHelper.shared.status.value = AudioHelper.shared.status.value == .playing ? .pause : .playing
         
         playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         
-        let _ = AudioHelper.shared.status == .playing ? AudioHelper.shared.playMusic() : AudioHelper.shared.pauseMusic()
+        let _ = AudioHelper.shared.status.value == .playing ? AudioHelper.shared.playMusic() : AudioHelper.shared.pauseMusic()
         
     }
     
@@ -87,7 +95,7 @@ extension ViewController: PlayAudioButtonDelegate {
             return
         }
         
-        AudioHelper.shared.status = .playing
+        AudioHelper.shared.status.value = .playing
         AudioHelper.shared.playMusic(with: previewUrl)
         AudioHelper.shared.setNowPlayingInfo(music: music)
         playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
