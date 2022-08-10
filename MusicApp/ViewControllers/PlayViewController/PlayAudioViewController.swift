@@ -15,14 +15,14 @@ protocol PlayAudioButtonDelegate{
 class PlayAudioViewController: UIViewController {
 
     lazy var imageView: UIImageView = {
-        let image = UIImageView(image: UIImage(systemName: "music.note"))
+        let image = UIImageView()
         image.contentMode = .scaleAspectFill//.scaleAspectFit//.scaleAspectFit//.scaleToFill
         image.translatesAutoresizingMaskIntoConstraints = false
-        if let music = detailViewModel?.music, let url = music.artworkUrl100  {
-            image.loadPreviewUrl(url)
-            albumLabel.text = music.collectionName
-            songLabel.text = music.trackName
-        }
+//        if let music = detailViewModel?.music, let url = music.artworkUrl100  {
+//            image.loadPreviewUrl(url)
+//            albumLabel.text = music.collectionName
+//            songLabel.text = music.trackName
+//        }
         return image
     }()
     let leftLabel = UILabel().setNormalLabel(textColor: .systemGray2, size: 9)
@@ -92,39 +92,13 @@ class PlayAudioViewController: UIViewController {
         
         super.viewDidLoad()
         setupView()
-        //bind value of music progress
         
-        
-        
-        AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
-            if let audioPosition = audioPosition {
-                
-                guard let self = self else { return }
-                
-                self.slider.value = Float(audioPosition.current)/Float(audioPosition.durationTime)
-                if Float(audioPosition.current)/Float(audioPosition.durationTime) == 1 {
-                    self.slider.maximumTrackTintColor = .gray
-                    
-//                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-                    //TODO handling not playing status
-                    self.delegate?.finishPlaying()
-                    
-                } else {
-                    self.slider.maximumTrackTintColor = .systemGray6//right side
-                    self.slider.minimumTrackTintColor = .gray //left side
-                }
-                let secondString = String(format: "%02d", Int(audioPosition.durationTime)%60)
-                let minuteString = String(format: "%02d", Int(audioPosition.durationTime)/60)
-                
-                self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
-                self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)
-            }
-        }
-        
+        bindData()
+       
         setupRemoteCommand()
     }
     
-    private func getTimeTrack(time: Double) -> String {
+    func getTimeTrack(time: Double) -> String {
         
         let secondString = String(format: "%02d", Int(time)%60)
         let minuteString = String(format: "%02d", Int(time)/60)

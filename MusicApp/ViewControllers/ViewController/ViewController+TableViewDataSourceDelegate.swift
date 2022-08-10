@@ -91,7 +91,7 @@ extension ViewController: PlayAudioButtonDelegate {
         AudioHelper.shared.playMusic(with: previewUrl)
         AudioHelper.shared.setNowPlayingInfo(music: music)
         playButton.value.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
-        imageView.loadPreviewUrl(imageUrl)
+        imageView.loadPreviewUrl(imageUrl)//payerviewcontroller need to update too
         floatingPlayView.alpha = 1
     }
 }

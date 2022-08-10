@@ -10,6 +10,44 @@ import MediaPlayer
 
 extension PlayAudioViewController {
     
+    func bindData() {
+        detailViewModel?.musicUrl.bind(listener: { [weak self] in
+            self?.imageView.loadPreviewUrl($0)
+        })
+        
+        detailViewModel?.collectionName.bind(listener: { [weak self] in
+            self?.albumLabel.text = $0
+        })
+        
+        detailViewModel?.songName.bind(listener: { [weak self] in
+            self?.songLabel.text = $0
+        })
+        //bind value of music progress
+        AudioHelper.shared.audioPosition.bind { [weak self] audioPosition in
+            if let audioPosition = audioPosition {
+                
+                guard let self = self else { return }
+                
+                self.slider.value = Float(audioPosition.current)/Float(audioPosition.durationTime)
+                if Float(audioPosition.current)/Float(audioPosition.durationTime) == 1 {
+                    self.slider.maximumTrackTintColor = .gray
+                    
+//                    self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+                    //TODO handling not playing status
+                    self.delegate?.finishPlaying()
+                    
+                } else {
+                    self.slider.maximumTrackTintColor = .systemGray6//right side
+                    self.slider.minimumTrackTintColor = .gray //left side
+                }
+               
+                
+                self.leftLabel.text = self.getTimeTrack(time: audioPosition.current)
+                self.rightLabel.text = self.getTimeTrack(time: audioPosition.durationTime - audioPosition.current)
+            }
+        }
+        
+    }
     
     func setupRemoteCommand() {
         

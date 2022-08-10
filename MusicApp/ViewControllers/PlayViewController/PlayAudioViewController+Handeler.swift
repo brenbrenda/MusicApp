@@ -61,8 +61,9 @@ extension PlayAudioViewController {
         
         AudioHelper.shared.audioPlayer.seek(to: targetTime)
         
-        if let music = detailViewModel?.music {
-            AudioHelper.shared.setNowPlayingInfo(music: music)
-        }
+        detailViewModel?.setNowPlayingInfo()
+//        if let music = detailViewModel?.music {
+//            AudioHelper.shared.setNowPlayingInfo(music: music)
+//        }
     }
 }

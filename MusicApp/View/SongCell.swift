@@ -49,18 +49,6 @@ class SongCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
         musicImage.frame = CGRect(x: 10,
                                      y: 10,
                                      width: 70,
@@ -76,6 +64,16 @@ class SongCell: UITableViewCell {
                                      height: 50)
         
         priceButton.frame = CGRect(x: contentView.frame.size.width - 100, y: contentView.frame.midY - 17.5, width: 80, height: 35)
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     public func configure(with model: Music) {

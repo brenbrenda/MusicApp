@@ -13,7 +13,6 @@ import MediaPlayer//FOR MPREMOTECOMMANDCENTER
 
 class AudioHelper: NSObject, ObservableObject {
     
-    
     @Published var status: PlayMode = .pause
     //update playing track of slider and time
     var audioPosition: Box<AudioPosition?> = Box(nil)

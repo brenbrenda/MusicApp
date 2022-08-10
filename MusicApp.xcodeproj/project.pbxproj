@@ -20,7 +20,7 @@
 		85DA0BF12886ADEA00CCDB36 /* MusicAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DA0BF02886ADEA00CCDB36 /* MusicAppUITests.swift */; };
 		85DA0BF32886ADEA00CCDB36 /* MusicAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DA0BF22886ADEA00CCDB36 /* MusicAppUITestsLaunchTests.swift */; };
 		85E822762886AF5D00B6EFED /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E822752886AF5D00B6EFED /* AudioHelper.swift */; };
-		85E822782886AFB600B6EFED /* Dynamic+Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E822772886AFB600B6EFED /* Dynamic+Box.swift */; };
+		85E822782886AFB600B6EFED /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E822772886AFB600B6EFED /* Box.swift */; };
 		85E8227A2886AFDF00B6EFED /* NetWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E822792886AFDF00B6EFED /* NetWork.swift */; };
 		85E8227D2886B04A00B6EFED /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E8227C2886B04A00B6EFED /* DetailViewModel.swift */; };
 		85E822812886B08B00B6EFED /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E822802886B08B00B6EFED /* SongCell.swift */; };
@@ -53,7 +53,7 @@
 		85DA0BCC2886ADE700CCDB36 /* MusicApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusicApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85DA0BCF2886ADE700CCDB36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		85DA0BD12886ADE700CCDB36 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		85DA0BD32886ADE700CCDB36 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		85DA0BD32886ADE700CCDB36 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 2; path = ViewController.swift; sourceTree = "<group>"; };
 		85DA0BD62886ADE700CCDB36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		85DA0BD82886ADE900CCDB36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		85DA0BDB2886ADE900CCDB36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -64,7 +64,7 @@
 		85DA0BF02886ADEA00CCDB36 /* MusicAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicAppUITests.swift; sourceTree = "<group>"; };
 		85DA0BF22886ADEA00CCDB36 /* MusicAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		85E822752886AF5D00B6EFED /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
-		85E822772886AFB600B6EFED /* Dynamic+Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dynamic+Box.swift"; sourceTree = "<group>"; };
+		85E822772886AFB600B6EFED /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		85E822792886AFDF00B6EFED /* NetWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWork.swift; sourceTree = "<group>"; };
 		85E8227C2886B04A00B6EFED /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		85E822802886B08B00B6EFED /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
@@ -107,12 +107,12 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		858E46B4288A7ACB004C7335 /* Dynamic */ = {
+		858E46B4288A7ACB004C7335 /* Box */ = {
 			isa = PBXGroup;
 			children = (
-				85E822772886AFB600B6EFED /* Dynamic+Box.swift */,
+				85E822772886AFB600B6EFED /* Box.swift */,
 			);
-			path = Dynamic;
+			path = Box;
 			sourceTree = "<group>";
 		};
 		85DA0BC32886ADE700CCDB36 = {
@@ -183,7 +183,7 @@
 			children = (
 				85E822792886AFDF00B6EFED /* NetWork.swift */,
 				85E822752886AF5D00B6EFED /* AudioHelper.swift */,
-				858E46B4288A7ACB004C7335 /* Dynamic */,
+				858E46B4288A7ACB004C7335 /* Box */,
 				85E822832886B12700B6EFED /* Extension */,
 			);
 			path = Model;
@@ -364,7 +364,7 @@
 				859F06792887C64400D8C5F8 /* LoadingView.swift in Sources */,
 				85E822762886AF5D00B6EFED /* AudioHelper.swift in Sources */,
 				85E822852886B13600B6EFED /* Extension.swift in Sources */,
-				85E822782886AFB600B6EFED /* Dynamic+Box.swift in Sources */,
+				85E822782886AFB600B6EFED /* Box.swift in Sources */,
 				859F06772887B17500D8C5F8 /* ViewController+TableViewDataSourceDelegate.swift in Sources */,
 				85E822882886B16B00B6EFED /* PlayAudioViewController.swift in Sources */,
 				85E822812886B08B00B6EFED /* SongCell.swift in Sources */,

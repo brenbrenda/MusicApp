@@ -11,8 +11,13 @@ import UIKit
 let imageCache = NSCache<AnyObject, AnyObject>()
 extension UIImageView {
     
-    func loadPreviewUrl(_ urlString: String) {
+    func loadPreviewUrl(_ urlString: String?) {
         
+        guard let urlString = urlString else {
+            self.image = UIImage(systemName: "music.note")
+            return
+        }
+
         self.image = nil
         //check cache for image first
         if let cachedImage = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
