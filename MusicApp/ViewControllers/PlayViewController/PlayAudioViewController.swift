@@ -18,11 +18,6 @@ class PlayAudioViewController: UIViewController {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill//.scaleAspectFit//.scaleAspectFit//.scaleToFill
         image.translatesAutoresizingMaskIntoConstraints = false
-//        if let music = detailViewModel?.music, let url = music.artworkUrl100  {
-//            image.loadPreviewUrl(url)
-//            albumLabel.text = music.collectionName
-//            songLabel.text = music.trackName
-//        }
         return image
     }()
     let leftLabel = UILabel().setNormalLabel(textColor: .systemGray2, size: 9)

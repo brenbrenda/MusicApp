@@ -222,8 +222,8 @@ extension AudioHelper {
         
         switch notification.name {
         case .AVPlayerItemDidPlayToEndTime:
-            print("you've played  \(notification.object)")
             
+            print("you've played  \(notification.object)")
             
         case .AVPlayerItemFailedToPlayToEndTime:
             let error = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error
@@ -237,7 +237,7 @@ extension AudioHelper {
     
     @objc func handlerAVSession(notification: Notification) {
         
-        print("diuiwehihdihewi\(notification.name)")
+        
         switch notification.name {
         case AVAudioSession.interruptionNotification:
             //MARK: handler when music was interuptted accidently
@@ -249,7 +249,6 @@ extension AudioHelper {
                 }
                 if type == .began {
                     // Interruption began, take appropriate actions (save state, update user interface)
-                    print("!!!!please stop your music1")
                     status = .pause
                     
                 }
@@ -264,7 +263,7 @@ extension AudioHelper {
                     }
                 }
         case AVAudioSession.silenceSecondaryAudioHintNotification:
-            print("!!!!please stop your music22")
+            
             status = .pause
             
             guard let userInfo = notification.userInfo,
