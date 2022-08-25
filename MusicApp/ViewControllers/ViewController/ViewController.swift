@@ -188,15 +188,14 @@ class ViewController: ASDKViewController<ASDisplayNode> {
             guard let self = self else { return }
             switch res {
             case .success(let data):
-                
                 self.musicData = data
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     LoadingView.removeToast(message: "end Loading")
                 }
-                
+
                 self.UIHandler(empty: data.results.isEmpty, text: term)
-                
+
             case .failure(let err):
                 if err == .noData {
                     DispatchQueue.main.async {
@@ -206,6 +205,20 @@ class ViewController: ASDKViewController<ASDisplayNode> {
                         self.noResultLabel.text = "there is no result about \"\(term)\" "
                     }
 
+                } else if err == .offLine {
+                    DispatchQueue.main.async {
+                        self.tableView.isHidden = true
+                        LoadingView.removeToast(message: "error")
+                        self.noResultLabel.isHidden = false
+                        self.noResultLabel.text = "you seem to disconnect from the server"
+                    }
+                } else if err == .failedToRequest {
+                    DispatchQueue.main.async {
+                        self.tableView.isHidden = true
+                        LoadingView.removeToast(message: "error")
+                        self.noResultLabel.isHidden = false
+                        self.noResultLabel.text = "an error has occurred"
+                    }
                 }
             }
         }

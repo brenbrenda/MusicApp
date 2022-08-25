@@ -34,6 +34,8 @@ class Network {
             
         }
     }
+    
+    
     func fetchData(term: String, entity: String?, completionHandler: @escaping (Result<MusicData, FetchError>) -> Void) {
         
         let string = entity == nil ? "https://itunes.apple.com/search?term=\(term)" : "https://itunes.apple.com/search?term=\(term)&entity=\(entity!)"
@@ -42,6 +44,13 @@ class Network {
            let url = URL(string: urlStr) {
             
             URLSession.shared.dataTask(with: url) { (data, response, error) in
+                print("data \(data) \n res\(response)  err\(error.debugDescription) \(error?.localizedDescription)")
+                
+                
+                if (response as? HTTPURLResponse)?.statusCode != 200 {
+//                    print("data \(data) \n res\(response)  err\(error)")
+                    completionHandler(.failure(FetchError.failedToRequest))
+                }
                 
                 if let data = data {
                     do {
@@ -58,7 +67,11 @@ class Network {
                         completionHandler(.failure(FetchError.failledToDecode))
                     }
                 } else {
-                    completionHandler(.failure(FetchError.parsingError))
+                    if let description = error?.localizedDescription, description == "The Internet connection appears to be offline." {
+                        completionHandler(.failure(FetchError.offLine))
+                    }
+                    
+                   
                 }
             }.resume()
         }
@@ -73,6 +86,7 @@ enum FetchError: Error {
     case noData
     case failedToRequest
     case notValidUrl
+    case offLine
 }
 
 
@@ -80,6 +94,8 @@ struct MusicData: Decodable {
     let resultCount: Int?
     let results: [Music]
 }
+
+
 struct Music: Decodable {
     let artistId: Int?
     let artistName: String?

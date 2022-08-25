@@ -46,9 +46,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         
-        AudioHelper.shared.status = .playing
-        AudioHelper.shared.playMusic(with: previewUrl)
-        AudioHelper.shared.setNowPlayingInfo(music: music)
+//        AudioHelper.shared.status = .playing
+        AudioHelper.shared.playMusic(with: music)
+//        AudioHelper.shared.setNowPlayingInfo(music: music)
         playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         imageView.loadPreviewUrl(imageUrl)
         floatingPlayView.alpha = 1
@@ -83,17 +83,20 @@ extension ViewController: PlayAudioButtonDelegate {
         guard let addedIndexPath = self.indexPath, let resultCount = musicData?.resultCount, addedIndexPath.row <= resultCount-1, let music = musicData?.results[addedIndexPath.row] else { return }
         currentPlayLabel.text = " " + (music.trackName ?? "")
         
-        guard let previewUrl = music.previewUrl, let imageUrl = music.artworkUrl100 else {
+        
+        //        AudioHelper.shared.status = .playing
+        //        AudioHelper.shared.setNowPlayingInfo(music: music)
+        AudioHelper.shared.playMusic(with: music)
+        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
+        floatingPlayView.alpha = 1
+        
+        //SettingImage
+        guard let imageUrl = music.artworkUrl100 else {
             //TODO: handler when there is no previewURL (that means cannot play the music)
             return
         }
-        
-        AudioHelper.shared.status = .playing
-        AudioHelper.shared.playMusic(with: previewUrl)
-        AudioHelper.shared.setNowPlayingInfo(music: music)
-        playButton.setImage(AudioHelper.shared.getPlayStatusImage(), for: .normal)
         imageView.loadPreviewUrl(imageUrl)
-        floatingPlayView.alpha = 1
+        
     }
 }
 

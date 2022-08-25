@@ -35,12 +35,14 @@ class PlayAudioViewController: UIViewController {
     
     let nextButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage.init(systemName: "goforward.10"), for: .normal)
         return button
     }()
     
     let prevButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage.init(systemName: "gobackward.10"), for: .normal)
         return button
     }()
@@ -126,15 +128,14 @@ class PlayAudioViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
-        imageView.frame = CGRect(x: view.frame.midX-100, y: 100, width: 200, height: 200)
-        
+        /*imageView.frame = CGRect(x: view.frame.midX-100, y: 100, width: 200, height: 200)
         albumLabel.frame = CGRect(x: view.frame.midX-150, y: 350, width: 300, height: 30)
         songLabel.frame = CGRect(x: view.frame.midX-100, y: 390, width: 200, height: 20)
         slider.frame = CGRect(x: view.frame.midX-150, y: 100+300+30, width: 300, height: 25)
         leftLabel.frame = CGRect(x: view.frame.midX-150, y: 100+300+30+25+1, width: 30, height: 10)
         rightLabel.frame = CGRect(x: view.frame.midX-150+300-30, y: 100+300+30+25+1, width: 30, height: 10)
         stackView.frame = CGRect(x: view.frame.midX-150, y: 100+300+30+55, width: 300, height: 60)
-        volumeSlider.frame = CGRect(x: view.frame.midX-150, y: 485+60+30, width: 300, height: 35)
+        volumeSlider.frame = CGRect(x: view.frame.midX-150, y: 485+60+30, width: 300, height: 35)*/
     }
     
     @objc func toggletPlay() {

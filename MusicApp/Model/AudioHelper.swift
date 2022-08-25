@@ -13,8 +13,8 @@ import MediaPlayer//FOR MPREMOTECOMMANDCENTER
 
 class AudioHelper: NSObject, ObservableObject {
     
+    var status: PlayMode = .pause//@Published var status: PlayMode = .pause
     
-    @Published var status: PlayMode = .pause
     //update playing track of slider and time
     var audioPosition: Box<AudioPosition?> = Box(nil)
     var audioPlayerObserver: Any?
@@ -87,9 +87,10 @@ class AudioHelper: NSObject, ObservableObject {
         })
         
     }
-    func playMusic(with url: URL) {
+    func playMusic(with music: Music) {
         
-        
+        playMusic()
+        guard let url = music.previewUrl else { return }
         let asset = AVURLAsset(url: url)
         let item = AVPlayerItem(asset: asset)
         item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
@@ -101,6 +102,8 @@ class AudioHelper: NSObject, ObservableObject {
             self.audioPlayer.allowsExternalPlayback = true
             self.audioPlayer.usesExternalPlaybackWhileExternalScreenIsActive = true
         }
+        
+        setNowPlayingInfo(music: music)
     }
     
     
@@ -168,7 +171,8 @@ class AudioHelper: NSObject, ObservableObject {
                 }
             }
         }
-                
+        
+        
         AudioHelper.shared.nowPlayingCenter.nowPlayingInfo = info
     }
 }
